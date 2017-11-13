@@ -10,6 +10,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        String string;
+        File file = new File(new File("myObjects.txt").getAbsolutePath());
+        System.out.println(file.getAbsolutePath());
         List<Students> peoples = new ArrayList<Students>();
 
         Students people1 = new Students(3, "Ivan", "Ivanov", 23);
@@ -34,9 +37,12 @@ public class Main {
         peoples.add(people9);
         peoples.add(people10);
 
+
         try {
-            FileOutputStream f = new FileOutputStream(new File("myObjects.txt"));
+
+            FileOutputStream f = new FileOutputStream(new File( "myObjects.txt"));
             ObjectOutputStream o = new ObjectOutputStream(f);
+
 
             // Write objects to file
             o.writeObject(people1);
@@ -52,10 +58,24 @@ public class Main {
 
 
             o.close();
-            f.close();
+           // f.close();
+        } catch ( FileNotFoundException e ) {
+            System.out.println("File not found");
+        } catch ( IOException e ) {
+            System.out.println("Error initializing stream");
+        }
 
-            FileInputStream fi = new FileInputStream(new File("myObjects.txt", "UTF8"));
+
+        try{
+
+
+            FileInputStream fi = new FileInputStream(new File("myObjects.txt"));
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            string = randomAccessFile.readLine();
+            randomAccessFile.close();
+            System.out.print(string);
             ObjectInputStream oi = new ObjectInputStream(fi);
+
 
             // Read objects
             people1 = (Students) oi.readObject();
@@ -81,7 +101,7 @@ public class Main {
             System.out.println(people10.toString());
 
             oi.close();
-            fi.close();
+            //fi.close();
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
